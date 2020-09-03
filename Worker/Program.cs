@@ -3,7 +3,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Text;
 using System.Threading;
-
+/*一个工作队列发送给一个消费者*/
 namespace Worker
 {
     class Program
