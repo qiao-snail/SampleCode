@@ -1,39 +1,21 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
-using System.Net.Http;
 using System.Text;
 
-namespace ReceiveLogsTopic
+namespace TestReceive
 {
     class Program
     {
         static void Main(string[] args)
         {
+            string exchangeName = "test.color.driect";
+            string routingKey = "color";
+            string queueName = "test.color.driect";
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
-            {
-                //var queueName = "";
-                channel.ExchangeDeclare(exchange: "topic_logs", type: "topic");
-                var queueName = channel.QueueDeclare("test").QueueName;
-                Console.WriteLine("queueName{0}", queueName);
-                if (args.Length < 1)
-                {
-                    Console.Error.WriteLine("Usage: {0} [binding_key...]",
-                                            Environment.GetCommandLineArgs()[0]);
-                    Console.WriteLine(" Press [enter] to exit.");
-                    Console.ReadLine();
-                    Environment.ExitCode = 1;
-                    return;
-                }
-
-                foreach (var bindingKey in args)
-                {
-                    channel.QueueBind(queue: queueName,
-                                      exchange: "topic_logs",
-                                      routingKey: bindingKey);
-                }
+            {              
 
                 Console.WriteLine(" [*] Waiting for messages. To exit press CTRL+C");
 
@@ -48,7 +30,7 @@ namespace ReceiveLogsTopic
                                       message);
                 };
                 channel.BasicConsume(queue: queueName,
-                                     autoAck: true,
+                                     autoAck: false,
                                      consumer: consumer);
 
                 Console.WriteLine(" Press [enter] to exit.");
