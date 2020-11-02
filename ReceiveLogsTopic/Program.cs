@@ -15,8 +15,8 @@ namespace ReceiveLogsTopic
             using (var channel = connection.CreateModel())
             {
                 //var queueName = "";
-                channel.ExchangeDeclare(exchange: "topic_logs", type: "topic");
-                var queueName = channel.QueueDeclare("test").QueueName;
+                channel.ExchangeDeclare(exchange: "topic_logs", type: "topic", durable: true);
+                var queueName = channel.QueueDeclare("test", true).QueueName;
                 Console.WriteLine("queueName{0}", queueName);
                 if (args.Length < 1)
                 {
